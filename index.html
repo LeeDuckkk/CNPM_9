@@ -4,8 +4,6 @@
 	<meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>GROUP 9</title>
-</head>
-<head>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -27,7 +25,7 @@
         }
         .slide {
             flex: 0 0 auto;
-            width: 30%;
+            width: 100%; /* Changed from 30% to 100% for better mobile view */
             scroll-snap-align: center;
             text-align: center;
             position: relative;
@@ -38,8 +36,7 @@
             color: #0f191a;
         }
         .slide img {
-            width: 250px;
-            height: 250px;
+            max-width: 100%; /* Changed from fixed width and height to max-width for responsive images */
             border: 2px solid #333;
         }
         .slide h2, .slide p {
@@ -51,6 +48,11 @@
         }
          a:hover {
             color: #3d6466; 
+        }
+        @media (min-width: 600px) { /* Added media query for desktop view */
+            .slide {
+                width: 30%; /* Revert to 30% width for desktop view */
+            }
         }
     </style>
 </head>
