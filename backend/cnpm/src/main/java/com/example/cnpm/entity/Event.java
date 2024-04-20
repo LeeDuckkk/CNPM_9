@@ -14,18 +14,14 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "confessions")
-public class Confession {
+@Table(name = "events")
+public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String image;  // the absolute URL to the image
-
     private String name;
-    private String description;
     private String content;
-    private String author;
 
     @CreationTimestamp
     private Date createdAt;
