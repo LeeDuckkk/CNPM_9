@@ -1,5 +1,6 @@
 package com.example.cnpm.service;
 
+import com.example.cnpm.controller.dtos.ConfessionDto;
 import com.example.cnpm.controller.dtos.UserDto;
 import com.example.cnpm.entity.User;
 import com.example.cnpm.repository.UserRepository;
@@ -53,6 +54,9 @@ public class UserServiceImpl implements UserService {
         int totalPage = (int) Math.ceil(userDtos.size() / (double) pageSize);
         if (page > totalPage) {
             page = totalPage;
+        }
+        if (page <= 0) {
+            page = 1;
         }
         int start = (page - 1) * pageSize;
         int end = Math.min(start + pageSize, userDtos.size());

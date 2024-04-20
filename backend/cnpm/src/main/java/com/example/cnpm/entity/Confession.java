@@ -27,6 +27,8 @@ public class Confession {
     private String content;
     private String author;
 
+    private Boolean isApproved = false;
+
     @CreationTimestamp
     private Date createdAt;
 

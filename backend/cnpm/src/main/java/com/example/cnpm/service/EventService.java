@@ -2,6 +2,7 @@ package com.example.cnpm.service;
 
 import com.example.cnpm.controller.dtos.EventDto;
 import com.example.cnpm.entity.Event;
+import org.springframework.data.domain.Page;
 
 public interface EventService {
     Event addEvent(EventDto event);
@@ -11,4 +12,6 @@ public interface EventService {
     void deleteEvent(Long id);
 
     Event getEvent(Long id);
+
+    Page<EventDto> getAllEvent(int page);
 }
