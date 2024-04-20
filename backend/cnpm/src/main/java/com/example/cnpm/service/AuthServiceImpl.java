@@ -10,11 +10,15 @@ import com.example.cnpm.repository.RoleRepository;
 import com.example.cnpm.repository.UserRepository;
 import com.example.cnpm.security.JwtTokenProvider;
 import com.example.cnpm.utils.Constant;
+import com.example.cnpm.utils.RandomPasswordGenerator;
+import com.example.cnpm.utils.SendMail;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,6 +27,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+@Slf4j
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -32,32 +37,64 @@ public class AuthServiceImpl implements AuthService {
     private PasswordEncoder passwordEncoder;
     private JwtTokenProvider jwtTokenProvider;
     private UserService userService;
+    private final SendMail sendMail;
 
-    public AuthServiceImpl(UserRepository userRepository, RoleRepository roleRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenProvider, UserService userService) {
+    public AuthServiceImpl(UserRepository userRepository,
+                           RoleRepository roleRepository,
+                           AuthenticationManager authenticationManager,
+                           PasswordEncoder passwordEncoder,
+                           JwtTokenProvider jwtTokenProvider,
+                           UserService userService,
+                           SendMail sendMail) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userService = userService;
+        this.sendMail = sendMail;
     }
 
     @Override
     public String login(LoginDto loginDto) {
-        // find user ... Load by username
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(),
-                loginDto.getPassword()));
-        // check
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = jwtTokenProvider.generateToken(authentication);
-
-        return token;
-
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword())
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            return jwtTokenProvider.generateToken(authentication);
+        } catch (AuthenticationException e) {
+            throw new CustomApiException(HttpStatus.UNAUTHORIZED, "Invalid username/password supplied");
+        }
     }
 
     @Override
-    public UserDto changePassword(UserDto user) {
-        return null;
+    public void changePasswordByEmail(User user) {
+        RandomPasswordGenerator rpg = new RandomPasswordGenerator();
+        String pass = rpg.generateRandomPassword();
+
+        user.setPassword(passwordEncoder.encode(pass));
+        userRepository.save(user);
+
+        try {
+            String bodyEmail = "Mật khẩu mới cho tài khoản " + user.getUsername() + " là: " + pass;
+            sendMail.sendMailRender(user.getEmail(), "PASSWORD RECOVER", bodyEmail);
+        } catch (Exception e) {
+            log.error("Error when send password to email: {}", e.getMessage());
+            throw new CustomApiException(HttpStatus.BAD_REQUEST, "Error when send password to email: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void changePasswordByOldPassword(User user, String oldPassword, String newPassword) {
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new CustomApiException(HttpStatus.BAD_REQUEST, "Mật khẩu cũ của bạn không chính xác");
+        } else if (passwordEncoder.matches(newPassword, user.getPassword())) {
+            throw new CustomApiException(HttpStatus.BAD_REQUEST, "Mật khẩu mới của bạn không thể giống với mật khẩu hiện tại");
+        } else {
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(user);
+        }
     }
 
 

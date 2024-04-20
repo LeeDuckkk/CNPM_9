@@ -14,6 +14,8 @@ import java.util.Date;
 @Getter
 public class UserDto {
     private Long id;
+
+    private String username;
     private String name;
 
     private String phoneNumber;
@@ -34,8 +36,4 @@ public class UserDto {
     private Date joinDate;
 
     private Placement placement;
-
-    private String username;
-    private String password;
-
 }

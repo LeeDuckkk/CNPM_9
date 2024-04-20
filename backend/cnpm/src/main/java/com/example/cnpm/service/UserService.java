@@ -6,4 +6,6 @@ public interface UserService {
     User getCurrentUser();
 
     Long getCurrentUserId();
+
+    User findByEmail(String email);
 }
