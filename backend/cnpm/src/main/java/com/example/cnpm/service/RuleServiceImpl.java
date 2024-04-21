@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RuleServiceImpl implements RuleService {
@@ -53,9 +54,10 @@ public class RuleServiceImpl implements RuleService {
 
     @Override
     public Page<RuleDto> getAllRule(int page) {
-        List<RuleDto> ruleDtos = ruleRepository.findAllDesc().stream().map(RuleDto::new).toList();
+        List<RuleDto> ruleDtos = ruleRepository.findAllDesc().stream().map(RuleDto::new).collect(Collectors.toList());
         int pageSize = 10;
-        int totalPage = (int) Math.ceil(ruleDtos.size() / (double) pageSize);
+        int totalElements = ruleDtos.size();
+        int totalPage = (int) Math.ceil((double) totalElements / pageSize);
         if (page > totalPage) {
             page = totalPage;
         }
@@ -63,7 +65,7 @@ public class RuleServiceImpl implements RuleService {
             page = 1;
         }
         int start = (page - 1) * pageSize;
-        int end = Math.min(start + pageSize, ruleDtos.size());
-        return new PageImpl<>(ruleDtos.subList(start, end), PageRequest.of(page, pageSize), ruleDtos.size());
+        int end = Math.min(start + pageSize, totalElements);
+        return new PageImpl<>(ruleDtos.subList(start, end), PageRequest.of(page - 1, pageSize), totalElements);
     }
 }

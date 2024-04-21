@@ -4,6 +4,7 @@ import com.example.cnpm.controller.dtos.SkillDto;
 import com.example.cnpm.entity.Skill;
 import com.example.cnpm.service.SkillService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -39,5 +40,10 @@ public class SkillController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<SkillDto> getSkill(@PathVariable Long id) {
         return ResponseEntity.ok(new SkillDto(skillService.getSkill(id)));
+    }
+
+    @GetMapping("")
+    public Page<SkillDto> getAllSkills(@RequestParam int page) {
+        return skillService.getAllSkill(page);
     }
 }

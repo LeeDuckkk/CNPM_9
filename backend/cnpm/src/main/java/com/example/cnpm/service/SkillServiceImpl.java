@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SkillServiceImpl implements SkillService {
@@ -53,9 +54,10 @@ public class SkillServiceImpl implements SkillService {
 
     @Override
     public Page<SkillDto> getAllSkill(int page) {
-        List<SkillDto> skillDtos = skillRepository.findAllDesc().stream().map(SkillDto::new).toList();
+        List<SkillDto> skillDtos = skillRepository.findAllDesc().stream().map(SkillDto::new).collect(Collectors.toList());
         int pageSize = 10;
-        int totalPage = (int) Math.ceil(skillDtos.size() / (double) pageSize);
+        int totalElements = skillDtos.size();
+        int totalPage = (int) Math.ceil((double) totalElements / pageSize);
         if (page > totalPage) {
             page = totalPage;
         }
@@ -63,7 +65,7 @@ public class SkillServiceImpl implements SkillService {
             page = 1;
         }
         int start = (page - 1) * pageSize;
-        int end = Math.min(start + pageSize, skillDtos.size());
-        return new PageImpl<>(skillDtos.subList(start, end), PageRequest.of(page, pageSize), skillDtos.size());
+        int end = Math.min(start + pageSize, totalElements);
+        return new PageImpl<>(skillDtos.subList(start, end), PageRequest.of(page - 1, pageSize), totalElements);
     }
 }

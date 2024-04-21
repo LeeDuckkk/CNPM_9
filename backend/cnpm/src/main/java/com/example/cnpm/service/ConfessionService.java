@@ -1,5 +1,6 @@
 package com.example.cnpm.service;
 
+import com.example.cnpm.controller.dtos.CommentDto;
 import com.example.cnpm.controller.dtos.CommentRequest;
 import com.example.cnpm.controller.dtos.ConfessionDto;
 import com.example.cnpm.entity.Comment;
@@ -16,7 +17,11 @@ public interface ConfessionService {
 
     Confession getConfession(Long id);
 
+    Page<CommentDto> getComments(Long id, int page);
+
     Confession acceptConfession(Long id);
+
+    byte[] getConfessionImage(Long id);
 
     Page<ConfessionDto> getAllConfession(int page);
 }

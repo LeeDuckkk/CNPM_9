@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ConfessionServiceImpl implements ConfessionService {
@@ -89,6 +90,23 @@ public class ConfessionServiceImpl implements ConfessionService {
     }
 
     @Override
+    public Page<CommentDto> getComments(Long id, int page) {
+        List<CommentDto> commentDtos = commentRepository.findAll().stream().map(CommentDto::new).collect(Collectors.toList());
+        int pageSize = 10;
+        int totalElements = commentDtos.size();
+        int totalPage = (int) Math.ceil((double) totalElements / pageSize);
+        if (page > totalPage) {
+            page = totalPage;
+        }
+        if (page <= 0) {
+            page = 1;
+        }
+        int start = (page - 1) * pageSize;
+        int end = Math.min(start + pageSize, totalElements);
+        return new PageImpl<>(commentDtos.subList(start, end), PageRequest.of(page - 1, pageSize), totalElements);
+    }
+
+    @Override
     public Confession acceptConfession(Long id) {
         Confession confession = confessionRepository.findById(id).orElse(null);
         if (confession == null) {
@@ -99,10 +117,20 @@ public class ConfessionServiceImpl implements ConfessionService {
     }
 
     @Override
+    public byte[] getConfessionImage(Long id) {
+        Confession confession = confessionRepository.findById(id).orElse(null);
+        if (confession == null) {
+            return null;
+        }
+        return storageService.getImageFile(confession);
+    }
+
+    @Override
     public Page<ConfessionDto> getAllConfession(int page) {
-        List<ConfessionDto> confessionDtos = confessionRepository.findAllApprovedConfession().stream().map(ConfessionDto::new).toList();
+        List<ConfessionDto> confessionDtos = confessionRepository.findAllApprovedConfession().stream().map(ConfessionDto::new).collect(Collectors.toList());
         int pageSize = 10;
-        int totalPage = (int) Math.ceil(confessionDtos.size() / (double) pageSize);
+        int totalElements = confessionDtos.size();
+        int totalPage = (int) Math.ceil((double) totalElements / pageSize);
         if (page > totalPage) {
             page = totalPage;
         }
@@ -110,7 +138,7 @@ public class ConfessionServiceImpl implements ConfessionService {
             page = 1;
         }
         int start = (page - 1) * pageSize;
-        int end = Math.min(start + pageSize, confessionDtos.size());
-        return new PageImpl<>(confessionDtos.subList(start, end), PageRequest.of(page, pageSize), confessionDtos.size());
+        int end = Math.min(start + pageSize, totalElements);
+        return new PageImpl<>(confessionDtos.subList(start, end), PageRequest.of(page - 1, pageSize), totalElements);
     }
 }

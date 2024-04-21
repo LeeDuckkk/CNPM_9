@@ -68,9 +68,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<UserDto> getAllUser(int page) {
-        List<UserDto> userDtos = userRepository.findAllDesc().stream().map(UserDto::new).toList();
+        List<UserDto> userDtos = userRepository.findAllDesc().stream().map(UserDto::new).collect(Collectors.toList());
         int pageSize = 10;
-        int totalPage = (int) Math.ceil(userDtos.size() / (double) pageSize);
+        int totalElements = userDtos.size();
+        int totalPage = (int) Math.ceil((double) totalElements / pageSize);
         if (page > totalPage) {
             page = totalPage;
         }
@@ -78,7 +79,7 @@ public class UserServiceImpl implements UserService {
             page = 1;
         }
         int start = (page - 1) * pageSize;
-        int end = Math.min(start + pageSize, userDtos.size());
-        return new PageImpl<>(userDtos.subList(start, end), PageRequest.of(page, pageSize), userDtos.size());
+        int end = Math.min(start + pageSize, totalElements);
+        return new PageImpl<>(userDtos.subList(start, end), PageRequest.of(page - 1, pageSize), totalElements);
     }
 }

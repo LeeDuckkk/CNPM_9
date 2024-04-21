@@ -4,6 +4,7 @@ import com.example.cnpm.controller.dtos.RuleDto;
 import com.example.cnpm.entity.Rule;
 import com.example.cnpm.service.RuleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -40,5 +41,10 @@ public class RuleController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<RuleDto> getRule(@PathVariable Long id) {
         return ResponseEntity.ok(new RuleDto(ruleService.getRule(id)));
+    }
+
+    @GetMapping("")
+    public Page<RuleDto> getAllRules(@RequestParam int page) {
+        return ruleService.getAllRule(page);
     }
 }

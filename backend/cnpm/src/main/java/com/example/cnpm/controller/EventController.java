@@ -4,6 +4,7 @@ import com.example.cnpm.controller.dtos.EventDto;
 import com.example.cnpm.entity.Event;
 import com.example.cnpm.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -38,5 +39,10 @@ public class EventController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<EventDto> getEvent(@PathVariable Long id) {
         return ResponseEntity.ok(new EventDto(eventService.getEvent(id)));
+    }
+
+    @GetMapping("")
+    public Page<EventDto> getAllEvents(@RequestParam int page) {
+        return eventService.getAllEvent(page);
     }
 }

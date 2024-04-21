@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -53,9 +54,10 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Page<EventDto> getAllEvent(int page) {
-        List<EventDto> eventDtos = eventRepository.findAllDesc().stream().map(EventDto::new).toList();
+        List<EventDto> eventDtos = eventRepository.findAllDesc().stream().map(EventDto::new).collect(Collectors.toList());
         int pageSize = 10;
-        int totalPage = (int) Math.ceil(eventDtos.size() / (double) pageSize);
+        int totalElements = eventDtos.size();
+        int totalPage = (int) Math.ceil((double) totalElements / pageSize);
         if (page > totalPage) {
             page = totalPage;
         }
@@ -63,7 +65,7 @@ public class EventServiceImpl implements EventService {
             page = 1;
         }
         int start = (page - 1) * pageSize;
-        int end = Math.min(start + pageSize, eventDtos.size());
-        return new PageImpl<>(eventDtos.subList(start, end), PageRequest.of(page, pageSize), eventDtos.size());
+        int end = Math.min(start + pageSize, totalElements);
+        return new PageImpl<>(eventDtos.subList(start, end), PageRequest.of(page - 1, pageSize), totalElements);
     }
 }

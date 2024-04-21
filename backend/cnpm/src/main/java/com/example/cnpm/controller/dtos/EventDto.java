@@ -11,9 +11,11 @@ import lombok.NoArgsConstructor;
 public class EventDto {
     private String name;
     private String content;
+    private String createdAt;
 
     public EventDto(Event event) {
         this.name = event.getName();
         this.content = event.getContent();
+        this.createdAt = event.getCreatedAt().toString();
     }
 }
