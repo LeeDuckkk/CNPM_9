@@ -20,8 +20,33 @@
           Quản lý tài khoản
         </el-menu-item>
       </el-menu-item-group>
+
       <el-menu-item-group>
-        <template #title> Cá nhân</template>
+        <template #title>Thông tin</template>
+        <el-menu-item :route="Paths.RULE" :index="Paths.RULE">
+          <FAIcon icon="fas fa-book" />
+          Quy định
+        </el-menu-item>
+        <el-menu-item :route="Paths.SKILL" :index="Paths.SKILL">
+          <FAIcon icon="fas fa-fist-raised" />
+          Kỹ thuật
+        </el-menu-item>
+        <el-menu-item :route="Paths.EVENT" :index="Paths.EVENT">
+          <FAIcon icon="fas fa-calendar-alt" />
+          Sự kiện
+        </el-menu-item>
+        <el-menu-item :route="Paths.CONFESSION" :index="Paths.CONFESSION">
+          <FAIcon icon="fas fa-praying-hands" />
+          Confession
+        </el-menu-item>
+        <el-menu-item :route="Paths.LOGIN" :index="Paths.LOGIN" v-if="!authenticated">
+          <FAIcon icon="fas fa-sign-in-alt" />
+          Đăng nhập
+        </el-menu-item>
+      </el-menu-item-group>
+
+      <el-menu-item-group v-if="roleList.includes(roles.ROLE_ADMIN) || roleList.includes(roles.ROLE_MEMBER)">
+        <template #title> Thành viên</template>
         <el-menu-item :route="Paths.MANAGE_USER" :index="Paths.MANAGE_USER">
           <FAIcon icon="fas fa-user" />
           Tài khoản
@@ -31,6 +56,8 @@
           Đăng xuất
         </el-menu-item>
       </el-menu-item-group>
+
+
     </el-menu>
   </div>
 </template>
@@ -51,7 +78,7 @@ const $route = useRoute()
 
 const authenticationStore = useAuthenticationStore()
 
-const { roleList } = storeToRefs(authenticationStore)
+const { authenticated, roleList } = storeToRefs(authenticationStore)
 
 function logout() {
   authenticationStore.logout()

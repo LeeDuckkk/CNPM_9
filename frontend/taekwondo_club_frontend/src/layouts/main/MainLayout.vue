@@ -1,5 +1,5 @@
 <template>
-  <el-row type="flex" justify="center" v-if="authenticated">
+  <el-row type="flex" justify="center">
     <el-col :xs="24" :sm="0">
 <!--      <NavigationMobile />-->
     </el-col>
@@ -10,9 +10,9 @@
       <RouterView />
     </el-col>
   </el-row>
-  <div class="desktop-logo-container" v-else>
-    <img src="@/assets/images/logo.svg" class="desktop-logo" />
-  </div>
+<!--  <div class="desktop-logo-container" v-else>-->
+<!--    <img src="@/assets/images/logo.svg" class="desktop-logo" />-->
+<!--  </div>-->
 </template>
 
 <script lang="ts" setup>

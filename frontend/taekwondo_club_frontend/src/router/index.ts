@@ -10,13 +10,18 @@ import ForgotPasswordView from "@/views/auth/ForgotPasswordView.vue";
 import ResetPasswordView from "@/views/auth/ResetPasswordView.vue";
 import UserManageView from "@/views/admin/user/UserManageView.vue";
 import UserInfomationView from "@/views/main/UserInfomationView.vue";
+import RuleView from "@/views/main/RuleView.vue";
+import SkillView from "@/views/main/SkillView.vue";
+import EventView from "@/views/main/EventView.vue";
+import ConfessionView from "@/views/main/ConfessionView.vue";
+import ConfessionDetailView from "@/components/confession/ConfessionDetailView.vue";
 
 export const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
             path: Paths.HOME,
-            component: LandingPageView,
+            component: HomePageView,
         },
         {
             path: Paths.MAIN,
@@ -34,6 +39,28 @@ export const router = createRouter({
                     path: Paths.MANAGE_USER,
                     component: UserInfomationView,
                 },
+                {
+                    path: Paths.RULE,
+                    component: RuleView,
+                },
+                {
+                    path: Paths.SKILL,
+                    component: SkillView,
+                },
+                {
+                    path: Paths.EVENT,
+                    component: EventView,
+                },
+                {
+                    path: Paths.CONFESSION,
+                    component: ConfessionView,
+                },
+                {
+                    path: '/confession/:id',
+                    name: 'ConfessionDetail',
+                    component: ConfessionDetailView,
+                    props: true
+                }
             ]
         },
         {

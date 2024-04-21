@@ -8,6 +8,13 @@ export const AuthAPI = {
     LOGOUT: '/logout',
 }
 
+export const AnonymousApi = {
+    RULE: '/rules',
+    EVENT: '/events',
+    SKILL: '/skills',
+    CONFESSION: '/confessions',
+}
+
 export const UserApi = {
     EDIT_PROFILE: '/users/edit-profile',
 }

@@ -12,6 +12,15 @@ export const Paths = {
     ADMIN_MANAGE_USER: '/admin/users',
 
     MANAGE_USER: '/manage-user',
+
+    RULE: '/rules',
+    EVENT: '/events',
+    SKILL: '/skills',
+    CONFESSION: '/confessions',
+
+    CONTACT: '/contact',
+    ABOUT: '/about',
+    FAQ: '/faq',
 }
 
 export const ANONYMOUS_ALLOW_PATHS = [

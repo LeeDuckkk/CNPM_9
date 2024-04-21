@@ -7,7 +7,7 @@ export const UserService = {
         const bodyData = (
             await http.get(AdminApi.USER_MANAGE + '/' + page)
         ).data
-        return bodyData.content;
+        return bodyData;
     },
     editProfile: async (payload: any) => {
         return await http.post(UserApi.EDIT_PROFILE, payload)

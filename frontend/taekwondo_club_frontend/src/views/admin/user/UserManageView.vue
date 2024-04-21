@@ -111,10 +111,16 @@
         align="center"
     />
   </el-table>
+  <el-pagination
+      v-model:page="currentPage"
+      :page-size="pageSize"
+      layout="prev, pager, next"
+      :total="totalItems">
+  </el-pagination>
 </template>
 
 <script setup lang="ts">
-import {onMounted, reactive, ref} from 'vue'
+import {onMounted, reactive, ref, watch} from 'vue'
 import {processErrorMessage} from '@/helper/responseErrorHandle'
 import type {FormRules} from 'element-plus'
 import {ElMessage} from 'element-plus'
@@ -131,6 +137,9 @@ const idEdit = ref(null as unknown as number)
 const loading = ref(false)
 const usersData = ref<any[] | null>(null);
 const rules = reactive<FormRules>({})
+const currentPage = ref(1)
+const totalItems = ref(0)
+const pageSize = 10
 
 function closeDialogEdit() {
   dialogEdit.value = false
@@ -156,11 +165,17 @@ onMounted(async () => {
   await loadData()
 })
 
+watch(currentPage, (newPage) => {
+  UserService.listForAdmin(newPage - 1);
+});
+
 async function loadData() {
   try {
     loading.value = true
 
-    let users = await UserService.listForAdmin(0)
+    const res = await UserService.listForAdmin(currentPage.value - 1)
+    let users = res.content
+    totalItems.value = res.totalElements
     usersData.value = users.map((userDTO: any) => {
       return {
         id: userDTO.id,
