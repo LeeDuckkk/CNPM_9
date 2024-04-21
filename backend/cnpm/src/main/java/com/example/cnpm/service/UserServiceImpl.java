@@ -1,6 +1,7 @@
 package com.example.cnpm.service;
 
 import com.example.cnpm.controller.dtos.ConfessionDto;
+import com.example.cnpm.controller.dtos.EditProfileRequest;
 import com.example.cnpm.controller.dtos.UserDto;
 import com.example.cnpm.entity.User;
 import com.example.cnpm.repository.UserRepository;
@@ -45,6 +46,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
+    }
+
+    @Override
+    public User editProfile(EditProfileRequest editProfileRequest) {
+        User user = getCurrentUser();
+        user.setName(editProfileRequest.getName());
+        user.setPhoneNumber(editProfileRequest.getPhoneNumber());
+        user.setEmail(editProfileRequest.getEmail());
+        user.setBirthday(editProfileRequest.getBirthday());
+        user.setBirthPlace(editProfileRequest.getBirthPlace());
+        user.setHobby(editProfileRequest.getHobby());
+        user.setHatred(editProfileRequest.getHatred());
+        user.setStrength(editProfileRequest.getStrength());
+        user.setWeakness(editProfileRequest.getWeakness());
+        user.setLifeMotto(editProfileRequest.getLifeMotto());
+        user.setAchievement(editProfileRequest.getAchievement());
+        user.setPlacement(editProfileRequest.getPlacement());
+        return userRepository.save(user);
     }
 
     @Override

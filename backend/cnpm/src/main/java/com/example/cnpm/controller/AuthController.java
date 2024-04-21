@@ -34,7 +34,7 @@ public class AuthController {
         return new ResponseEntity<>(user,HttpStatus.CREATED);
     }
 
-    @PostMapping("/change-password-by-email")
+    @PostMapping("/forgot-password")
     public ResponseEntity<?> changePasswordByEmail(@RequestBody PasswordResetRequest passwordResetRequest){
         User user = userService.findByEmail(passwordResetRequest.getEmail());
         if (user == null){
@@ -44,10 +44,10 @@ public class AuthController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/change-password-by-old-password")
+    @PostMapping("/reset-password")
     public ResponseEntity<?> changePasswordByOldPassword(@RequestBody PasswordChangeRequest passwordChangeRequest){
         String oldPassword = passwordChangeRequest.getOldPassword();
-        String newPassword = passwordChangeRequest.getNewPassword();
+        String newPassword = passwordChangeRequest.getPassword();
 
         User user = userService.getCurrentUser();
         if (user == null){
