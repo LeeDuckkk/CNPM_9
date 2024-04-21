@@ -2,10 +2,14 @@ export const AuthAPI = {
     GET_USER_INFO: '/users/me',
 
     LOGIN_WITH_PASSWORD: '/auth/signin',
-    FORGOT_PASSWORD: '/auth/forgot_password',
-    RESET_PASSWORD: '/auth/reset_password',
+    FORGOT_PASSWORD: '/auth/forgot-password',
+    RESET_PASSWORD: '/auth/reset-password',
     REGISTER: '/auth/register',
     LOGOUT: '/logout',
+}
+
+export const UserApi = {
+    EDIT_PROFILE: '/users/edit-profile',
 }
 
 export const AdminApi = {

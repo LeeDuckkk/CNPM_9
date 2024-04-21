@@ -18,4 +18,5 @@ export const ANONYMOUS_ALLOW_PATHS = [
     Paths.HOME,
     Paths.LOGIN,
     Paths.REGISTER,
+    Paths.FORGOT_PASSWORD,
 ]

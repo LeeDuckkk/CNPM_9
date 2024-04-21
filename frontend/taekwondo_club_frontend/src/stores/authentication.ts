@@ -21,7 +21,7 @@ export const useAuthenticationStore = defineStore({
                 const resUser = await getUserInfo()
                 this.user = resUser
 
-                for (const item of resUser.roles) {
+                for (const item of resUser.role) {
                     this.roles.push(item.name)
                 }
 

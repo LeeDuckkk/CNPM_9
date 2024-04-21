@@ -1,5 +1,5 @@
 import http from '@/services/http'
-import {AdminApi, AuthAPI} from '@/constants/API'
+import {AdminApi, AuthAPI, UserApi} from '@/constants/API'
 
 
 export const UserService = {
@@ -9,4 +9,10 @@ export const UserService = {
         ).data
         return bodyData.content;
     },
+    editProfile: async (payload: any) => {
+        return await http.post(UserApi.EDIT_PROFILE, payload)
+    },
+    changePassword: async (payload: any) => {
+        return await http.post(AuthAPI.RESET_PASSWORD, payload)
+    }
 }

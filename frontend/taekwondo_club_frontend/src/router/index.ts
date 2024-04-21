@@ -9,6 +9,7 @@ import LoginView from "@/views/auth/LoginView.vue";
 import ForgotPasswordView from "@/views/auth/ForgotPasswordView.vue";
 import ResetPasswordView from "@/views/auth/ResetPasswordView.vue";
 import UserManageView from "@/views/admin/user/UserManageView.vue";
+import UserInfomationView from "@/views/main/UserInfomationView.vue";
 
 export const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +29,10 @@ export const router = createRouter({
                 {
                     path: Paths.ADMIN_MANAGE_USER,
                     component: UserManageView,
+                },
+                {
+                    path: Paths.MANAGE_USER,
+                    component: UserInfomationView,
                 },
             ]
         },
