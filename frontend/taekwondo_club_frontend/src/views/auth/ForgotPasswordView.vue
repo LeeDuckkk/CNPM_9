@@ -6,7 +6,7 @@
             class="form"
             :model="formForgotPassword"
             :rules="rules"
-            :ref="toRef('FORGOT_PASSWORD_FORM')"
+            :ref="toRef(RefName.FORGOT_PASSWORD_FORM)"
             @submit.native.prevent="submitForm()">
           <h3>Quên mật khẩu</h3>
           <div class="flex-column">
@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue'
+import {reactive, ref, toRef, watch} from 'vue'
 import type { FormRules } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import { forgotPassword } from '@/services/auth'
@@ -54,10 +54,10 @@ import { storeToRefs } from 'pinia'
 import { processErrorMessage } from '@/helper/responseErrorHandle'
 import useRefs from '@/common/useRefs'
 
-const { refs, toRef } = useRefs<{
-  SUBMIT_BTN: InstanceType<typeof CommonButton>
-  FORGOT_PASSWORD_FORM: InstanceType<any>
-}>()
+const RefName = {
+  FORGOT_PASSWORD_FORM: 'FORGOT_PASSWORD_FORM',
+  SUBMIT_BTN: 'SUBMIT_BTN',
+}
 
 const authenticationStore = useAuthenticationStore()
 const { authenticated } = storeToRefs(authenticationStore)
@@ -99,9 +99,7 @@ const rules = reactive<FormRules>({
 })
 
 async function submitForm() {
-  refs.FORGOT_PASSWORD_FORM.validate(async (valid: boolean) => {
-    if (valid) {
-      // refs.SUBMIT_BTN?.setLoading(true)
+
       try {
         await forgotPassword(formForgotPassword.value)
         await router.push(Paths.LOGIN)
@@ -117,11 +115,7 @@ async function submitForm() {
           e,
           'Có lỗi xảy ra trong quá trình gửi thông tin quên mật khẩu. Vui lòng thử lại!'
         )
-      } finally {
-        // refs.SUBMIT_BTN?.setLoading(false)
       }
-    }
-  })
 }
 </script>
 
