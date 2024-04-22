@@ -53,8 +53,8 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
-    public Page<SkillDto> getAllSkill(int page) {
-        List<SkillDto> skillDtos = skillRepository.findAllDesc().stream().map(SkillDto::new).collect(Collectors.toList());
+    public Page<Skill> getAllSkill(int page) {
+        List<Skill> skillDtos = skillRepository.findAllDesc();
         int pageSize = 10;
         int totalElements = skillDtos.size();
         int totalPage = (int) Math.ceil((double) totalElements / pageSize);

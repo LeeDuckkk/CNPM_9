@@ -1,6 +1,7 @@
 package com.example.cnpm.controller;
 
 import com.example.cnpm.controller.dtos.*;
+import com.example.cnpm.entity.Skill;
 import com.example.cnpm.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -54,7 +55,7 @@ public class AdminController {
 
     @GetMapping("/skills/{page}")
     @PreAuthorize("hasRole('ADMIN')")
-    Page<SkillDto> getListSkill(@PathVariable("page") int page) {
+    Page<Skill> getListSkill(@PathVariable("page") int page) {
         return skillService.getAllSkill(page);
     }
 

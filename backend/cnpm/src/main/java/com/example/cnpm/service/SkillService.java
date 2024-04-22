@@ -13,5 +13,5 @@ public interface SkillService {
 
     Skill getSkill(Long id);
 
-    Page<SkillDto> getAllSkill(int page);
+    Page<Skill> getAllSkill(int page);
 }

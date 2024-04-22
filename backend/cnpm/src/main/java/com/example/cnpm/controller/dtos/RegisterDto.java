@@ -1,5 +1,6 @@
 package com.example.cnpm.controller.dtos;
 
+import com.example.cnpm.entity.Role;
 import com.example.cnpm.entity.enums.Placement;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,6 +34,7 @@ public class RegisterDto {
     private String achievement;
 
     private Date joinDate;
+    private Set<Role> roles;
 
     private Placement placement;
 

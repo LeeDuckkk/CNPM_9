@@ -43,7 +43,7 @@ public class SkillController {
     }
 
     @GetMapping("")
-    public Page<SkillDto> getAllSkills(@RequestParam int page) {
+    public Page<Skill> getAllSkills(@RequestParam int page) {
         return skillService.getAllSkill(page);
     }
 }

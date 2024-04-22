@@ -61,6 +61,7 @@ public class EventServiceImpl implements EventService {
         if (page > totalPage) {
             page = totalPage;
         }
+
         if (page <= 0) {
             page = 1;
         }
