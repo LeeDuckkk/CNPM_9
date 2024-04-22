@@ -13,5 +13,5 @@ public interface EventService {
 
     Event getEvent(Long id);
 
-    Page<EventDto> getAllEvent(int page);
+    Page<Event> getAllEvent(int page);
 }

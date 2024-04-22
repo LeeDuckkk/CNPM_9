@@ -18,6 +18,6 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     Boolean existsByPhoneNumber(String phoneNumber);
 
-    @Query("SELECT u FROM User u ORDER BY u.id DESC")
+    @Query("SELECT u FROM User u WHERE u.name != 'anonymous' ORDER BY u.createdAt DESC")
     List<User> findAllDesc();
 }

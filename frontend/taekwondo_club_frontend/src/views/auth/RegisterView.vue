@@ -4,7 +4,7 @@
       <div class="wrapper">
         <el-form
             class="form"
-            :ref="toRef('REGISTER_FORM')"
+            :ref="toRef(RefName.REGISTER_FORM)"
             :model="form"
             :rules="rules"
             :hide-required-asterisk="true"
@@ -181,16 +181,16 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue'
+import {reactive, ref, toRef, watch} from 'vue'
 import type { FormRules } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import { useAuthenticationStore } from '@/stores/authentication'
 import { Paths } from '@/router/paths'
-import { router } from '@/router'
 import { processErrorMessage } from '@/helper/responseErrorHandle'
 import { register } from '@/services/auth'
 import { storeToRefs } from 'pinia'
 import useRefs from '@/common/useRefs'
+import {useRouter} from "vue-router";
 
 const validateConfirmPassword = (rule: any, value: any, callback: any) => {
   if (value === '') {
@@ -220,10 +220,10 @@ const form = ref({
   placement: 'WHITE',
 })
 
-const { refs, toRef } = useRefs<{
-  SUBMIT_BUTTON: InstanceType<typeof CommonButton>
-  REGISTER_FORM: InstanceType<any>
-}>()
+const RefName = {
+  REGISTER_FORM: 'REGISTER_FORM',
+  SUBMIT_BUTTON: 'SUBMIT_BUTTON',
+}
 
 const rules = reactive<FormRules>({
   name: [{ required: true, message: 'Nhập tên người dùng để đăng ký' }],
@@ -255,6 +255,8 @@ const errorMessage = ref(null)
 const authenticationStore = useAuthenticationStore()
 const { authenticated } = storeToRefs(authenticationStore)
 
+const router = useRouter()
+
 watch(
     authenticated,
     (newAuth) => {
@@ -267,47 +269,44 @@ watch(
     }
 )
 
-function onSubmit() {
+async function onSubmit() {
   errorMessage.value = null
-  refs.REGISTER_FORM.validate(async (valid: any) => {
-    if (valid) {
-      // refs.SUBMIT_BUTTON?.setLoading(true)
-      try {
-        await register({
-          name: form.value.name,
-          email: form.value.email,
-          password: form.value.password,
-          username: form.value.username,
-          phoneNumber: form.value.phoneNumber,
-          birthday: form.value.birthday,
-          birthPlace: form.value.birthPlace,
-          hobby: form.value.hobby,
-          hatred: form.value.hatred,
-          strength: form.value.strength,
-          weakness: form.value.weakness,
-          lifeMotto: form.value.lifeMotto,
-          achievement: form.value.achievement,
-          joinDate: form.value.joinDate,
-          placement: form.value.placement,
-          role: 'ROLE_MEMBER',
-        })
-        ElMessage({
-          message:
-              'Đăng ký thành công, hệ thống sẽ gửi username xác nhận trong giây lát',
-          type: 'success',
-          duration: 5000,
-        })
-        await router.push(Paths.LOGIN)
-      } catch (e: any) {
-        processErrorMessage(e)
-        errorMessage.value = e.response?.data?.data
-      } finally {
-        // refs.SUBMIT_BUTTON?.setLoading(false)
-      }
-    } else {
-      return false
-    }
-  })
+
+  try {
+    await register({
+      name: form.value.name,
+      email: form.value.email,
+      password: form.value.password,
+      username: form.value.username,
+      phoneNumber: form.value.phoneNumber,
+      birthday: form.value.birthday,
+      birthPlace: form.value.birthPlace,
+      hobby: form.value.hobby,
+      hatred: form.value.hatred,
+      strength: form.value.strength,
+      weakness: form.value.weakness,
+      lifeMotto: form.value.lifeMotto,
+      achievement: form.value.achievement,
+      joinDate: form.value.joinDate,
+      placement: form.value.placement,
+      role: 'ROLE_MEMBER',
+    })
+    await router.push(Paths.LOGIN)
+
+    ElMessage({
+      message:
+          'Đăng ký thành công, hệ thống sẽ xác nhận trong giây lát',
+      type: 'success',
+      duration: 5000,
+    })
+    // redirect to login
+  } catch (e: any) {
+    processErrorMessage(e)
+    errorMessage.value = e.response?.data?.data
+  } finally {
+    // refs.SUBMIT_BUTTON?.setLoading(false)
+  }
+
 }
 </script>
 

@@ -1,5 +1,18 @@
 import http from "@/services/http";
 import {AdminApi, AnonymousApi} from "@/constants/API";
+import axios from "axios";
+import {getLocalStorage} from "@/helper/LocalStorageHelper";
+import {LocalStorageKeys} from "@/constants/LocalStorageKey";
+import {RequestHeaders} from "@/constants/HTTP";
+
+const axiosInstance = axios.create({
+    withCredentials: true,
+    baseURL: import.meta.env.VITE_APP_ROOT_API,
+    headers: {
+        'Content-Type': 'multipart/form-data',
+    },
+});
+
 
 export const ConfessionService = {
     list: async (page: number = 0) => {
@@ -30,4 +43,32 @@ export const ConfessionService = {
         });
         return bodyData.data;
     },
+    add: async (payload: any) => {
+        console.log(payload)
+        return (
+            await axiosInstance.post(AdminApi.CONFESSIONS, payload)
+        ).data;
+    },
+    edit: async (id: any, payload: any) => {
+        const bodyData = (
+            await http.put(AdminApi.CONFESSIONS + '/' + id, payload)
+        ).data
+        return bodyData;
+    },
+    delete: async (id: any) => {
+        const bodyData = (
+            await http.delete(AdminApi.CONFESSIONS + '/' + id)
+        ).data
+        return bodyData;
+    },
+    all_confession: async (page: any) => {
+        const bodyData = (
+            await http.get(AdminApi.UNAPPROVED_CONFESSIONS, {
+                params: {
+                    page: page
+                }
+            })
+        ).data
+        return bodyData;
+    }
 }

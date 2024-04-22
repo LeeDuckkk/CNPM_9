@@ -23,9 +23,11 @@
   <div class="comment-list">
     <h2>Bình luận</h2>
     <div class="comment-item" v-for="comment in comments">
-      <img class="avatar" src="https://via.placeholder.com/15" alt="User Avatar">
+      <img class="avatar" :src="'https://picsum.photos/200/' + comment.user.id * 100" alt="User Avatar">
       <div class="comment-content">
-        <strong class="text-author">{{ comment.user.name }}</strong>
+        <strong class="text-author" v-if="comment.user.name">{{ comment.user.name }}</strong>
+        <strong class="text-author" v-else>Ẩn danh</strong>
+
         <p class="text-content-comment">{{ comment.content }}</p>
         <i class="smaller-text">{{ formatDate(comment.createdDate) }}</i>
       </div>
@@ -64,7 +66,7 @@ onMounted(async () => {
     confession.value = await ConfessionService.getById(id);
     imageUrl.value = "http://localhost:80/api/confessions/" + id + "/image";
 
-    await getComments(currentPage.value - 1)
+    await getComments(currentPage.value - 1, id)
   } catch(e) {
     processErrorMessage(e, "Có lỗi đã xảy ra trong quá trình tải dữ liệu. " +
         "Vui lòng thử lại sau!")
@@ -74,10 +76,10 @@ onMounted(async () => {
 });
 
 watch(currentPage, (newPage) => {
-  getComments(newPage - 1);
+  getComments(newPage - 1, route.params.id);
 });
 
-async function getComments(page: number) {
+async function getComments(page: number, id: number) {
   try {
     loading.value = true
     const id = route.params.id;

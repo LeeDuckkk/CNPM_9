@@ -42,7 +42,7 @@ public class EventController {
     }
 
     @GetMapping("")
-    public Page<EventDto> getAllEvents(@RequestParam int page) {
+    public Page<Event> getAllEvents(@RequestParam int page) {
         return eventService.getAllEvent(page);
     }
 }

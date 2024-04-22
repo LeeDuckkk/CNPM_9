@@ -25,4 +25,6 @@ export const AdminApi = {
     EVENTS: '/events',
     SKILLS: '/skills',
     RULES: '/rules',
+    CONFESSIONS: '/confessions',
+    UNAPPROVED_CONFESSIONS: '/confessions/all-confessions',
 }

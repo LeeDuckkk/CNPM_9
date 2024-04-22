@@ -54,6 +54,7 @@ public class SecurityConfig {
 //                        authorize.anyRequest().authenticated()
                                 authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll()
                                         .requestMatchers("/api/auth/**").permitAll()
+                                        .requestMatchers("/api/confessions/**").permitAll()
                                         .anyRequest().authenticated()
                 ).exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .httpBasic(Customizer.withDefaults()).sessionManagement(session ->

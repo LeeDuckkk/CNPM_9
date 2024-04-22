@@ -53,8 +53,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Page<EventDto> getAllEvent(int page) {
-        List<EventDto> eventDtos = eventRepository.findAllDesc().stream().map(EventDto::new).collect(Collectors.toList());
+    public Page<Event> getAllEvent(int page) {
+        List<Event> eventDtos = eventRepository.findAllDesc();
         int pageSize = 10;
         int totalElements = eventDtos.size();
         int totalPage = (int) Math.ceil((double) totalElements / pageSize);

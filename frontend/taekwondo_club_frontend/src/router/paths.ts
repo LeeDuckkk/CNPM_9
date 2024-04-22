@@ -10,6 +10,10 @@ export const Paths = {
     CHANGE_PASSWORD: '/change-password',
 
     ADMIN_MANAGE_USER: '/admin/users',
+    ADMIN_MANAGE_SKILL: '/admin/skills',
+    ADMIN_MANAGE_RULE: '/admin/rules',
+    ADMIN_MANAGE_EVENT: '/admin/events',
+    ADMIN_MANAGE_CONFESSION: '/admin/confessions',
 
     MANAGE_USER: '/manage-user',
 

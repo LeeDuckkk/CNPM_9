@@ -6,7 +6,7 @@
             class="form"
             :model="formLogin"
             :rules="rules"
-            :ref="toRef('LOGIN_FORM')"
+            :ref="toRef(RefName.LOGIN_FORM)"
             @submit.native.prevent="loginWithPassword()">
           <h3>Đăng nhập</h3>
           <div class="flex-column">
@@ -57,7 +57,7 @@
             >Quên mật khẩu ?
           </router-link></span>
           </div>
-          <button :ref="toRef('LOGIN_BTN')" class="button-submit" type="submit">Đăng nhập</button>
+          <button :ref="toRef(RefName.LOGIN_BTN)" class="button-submit" type="submit">Đăng nhập</button>
           <p class="p">Chưa có tài khoản ? <span class="span"><router-link
               type="primary"
               :to="Paths.REGISTER"
@@ -121,7 +121,7 @@
 import {login,} from '@/services/auth'
 import {Paths} from '@/router/paths'
 import {useRoute, useRouter} from 'vue-router'
-import {reactive, ref} from 'vue'
+import {reactive, ref, toRef} from 'vue'
 import {ElMessage, type FormRules} from 'element-plus'
 import {useAuthenticationStore} from '@/stores/authentication'
 import {storeToRefs} from 'pinia'
@@ -129,10 +129,10 @@ import {putLocalStorage,} from '@/helper/LocalStorageHelper'
 import {LocalStorageKeys} from '@/constants/LocalStorageKey'
 import useRefs from '@/common/useRefs'
 
-const {refs, toRef} = useRefs<{
-  LOGIN_FORM: InstanceType<any>
-  LOGIN_BTN: InstanceType<typeof CommonButton>
-}>()
+const RefName = {
+  LOGIN_FORM: 'LOGIN_FORM',
+  LOGIN_BTN: 'LOGIN_BTN',
+}
 const $route = useRoute()
 const $router = useRouter()
 const formLogin = ref({
@@ -170,8 +170,6 @@ const router = useRouter()
 const route = useRoute()
 
 async function loginWithPassword() {
-  refs.LOGIN_FORM.validate(async (valid: any) => {
-    if (valid) {
       // refs.LOGIN_BTN?.setLoading(true)
       try {
         const loginRes = await login(
@@ -195,8 +193,7 @@ async function loginWithPassword() {
       } finally {
         // refs.LOGIN_BTN?.setLoading(false)
       }
-    }
-  })
+
 }
 </script>
 

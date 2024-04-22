@@ -19,6 +19,33 @@
           <FAIcon icon="fa-solid fa-user-group" />
           Quản lý tài khoản
         </el-menu-item>
+        <el-menu-item
+            :route="Paths.ADMIN_MANAGE_CONFESSION"
+            :index="Paths.ADMIN_MANAGE_CONFESSION">
+          <FAIcon icon="fa-solid fa-praying-hands" />
+          Quản lý confession
+        </el-menu-item>
+        <el-menu-item
+            :route="Paths.ADMIN_MANAGE_SKILL"
+            :index="Paths.ADMIN_MANAGE_SKILL"
+        >
+          <FAIcon icon="fa-solid fa-tools" />
+          Quản lý kỹ thuật
+        </el-menu-item>
+        <el-menu-item
+            :route="Paths.ADMIN_MANAGE_EVENT"
+            :index="Paths.ADMIN_MANAGE_EVENT"
+        >
+          <FAIcon icon="fa-solid fa-calendar-alt" />
+          Quản lý sự kiện
+        </el-menu-item>
+        <el-menu-item
+            :route="Paths.ADMIN_MANAGE_RULE"
+            :index="Paths.ADMIN_MANAGE_RULE"
+        >
+          <FAIcon icon="fa-solid fa-book" />
+          Quản lý quy định
+        </el-menu-item>
       </el-menu-item-group>
 
       <el-menu-item-group>

@@ -1,6 +1,8 @@
 package com.example.cnpm.controller;
 
 import com.example.cnpm.controller.dtos.*;
+import com.example.cnpm.entity.Event;
+import com.example.cnpm.entity.Rule;
 import com.example.cnpm.entity.Skill;
 import com.example.cnpm.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,13 +45,13 @@ public class AdminController {
 
     @GetMapping("/rules/{page}")
     @PreAuthorize("hasRole('ADMIN')")
-    Page<RuleDto> getListRule(@PathVariable("page") int page) {
+    Page<Rule> getListRule(@PathVariable("page") int page) {
         return ruleService.getAllRule(page);
     }
 
     @GetMapping("/events/{page}")
     @PreAuthorize("hasRole('ADMIN')")
-    Page<EventDto> getListEvent(@PathVariable("page") int page) {
+    Page<Event> getListEvent(@PathVariable("page") int page) {
         return eventService.getAllEvent(page);
     }
 

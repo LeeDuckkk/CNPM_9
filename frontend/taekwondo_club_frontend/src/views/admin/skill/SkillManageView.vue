@@ -1,5 +1,5 @@
 <template>
-  <h1>Quản lý quy định</h1>
+  <h1>Quản lý kỹ năng</h1>
   <br/>
   <el-row :gutter="12">
     <el-col :md="16">
@@ -22,7 +22,7 @@
           <el-col :md="9">
             <el-form-item label="Tên" prop="name">
               <el-input
-                  placeholder="Lọc theo tên quy tắc"
+                  placeholder="Lọc theo tên kỹ năng"
               />
             </el-form-item>
           </el-col>
@@ -34,10 +34,10 @@
     </el-col>
     <el-col :md="8">
       <CommonButton
-          class="add-rule-btn"
+          class="add-skill-btn"
           type="primary"
-          @click="showAddRuleDialog"
-      >Thêm quy tắc
+          @click="showAddSkillDialog"
+      >Thêm kỹ năng
       </CommonButton>
     </el-col>
   </el-row>
@@ -45,7 +45,7 @@
   <el-table
       v-loading="loading"
       empty-text="Không có dữ liệu"
-      :data="rulesData"
+      :data="skillsData"
       border
       style="width: 100%;
           border: 1px solid #ddd;
@@ -91,7 +91,7 @@
         >Chỉnh sửa
         </CommonButton>
         <el-popconfirm
-            :title="`Bạn chắc chắn muốn xóa quy tắc '${scope.row.name}'?`"
+            :title="`Bạn chắc chắn muốn xóa kỹ năng '${scope.row.name}'?`"
             confirm-button-text="Xác nhận"
             cancel-button-text="Hủy"
             @confirm="handleDelete(scope.row.id)"
@@ -106,12 +106,12 @@
     </el-table-column>
   </el-table>
 
-  <AddRuleDialog
+  <AddSkillDialog
       v-model="dialogAdd"
       @close="closeDialogAdd"
   />
 
-  <EditRuleDialog
+  <EditSkillDialog
       v-model="dialogEdit"
       :id="idEdit"
       @close="closeDialogEdit"
@@ -131,18 +131,18 @@ import {processErrorMessage} from '@/helper/responseErrorHandle'
 import type {FormRules} from 'element-plus'
 import {ElMessage} from 'element-plus'
 import {useRouter} from "vue-router";
-import {RuleService} from "@/services/rule";
+import {SkillService} from "@/services/skill";
 import useRefs from '@/common/useRefs'
 import CommonButton from "@/components/common/CommonButton.vue";
-import EditRuleDialog from "@/components/rule/EditRuleDialog.vue";
-import AddRuleDialog from "@/components/rule/AddRuleDialog.vue";
+import EditSkillDialog from "@/components/skill/EditSkillDialog.vue";
+import AddSkillDialog from "@/components/skill/AddSkillDialog.vue";
 
 const dialogAdd = ref(false)
 const dialogEdit = ref(false)
 const idEdit = ref(null as unknown as number)
 
 const loading = ref(false)
-const rulesData = ref<any[] | null>(null);
+const skillsData = ref<any[] | null>(null);
 const rules = reactive<FormRules>({})
 const currentPage = ref(1)
 const totalItems = ref(0)
@@ -173,21 +173,21 @@ onMounted(async () => {
 })
 
 watch(currentPage, (newPage) => {
-  RuleService.list(newPage - 1);
+  SkillService.list(newPage - 1);
 });
 
 async function loadData() {
   try {
     loading.value = true
 
-    const res = await RuleService.list(currentPage.value - 1)
-    let rules = res.content
+    const res = await SkillService.list(currentPage.value - 1)
+    let skills = res.content
     totalItems.value = res.totalElements
-    rulesData.value = rules.map((ruleDTO: any) => {
+    skillsData.value = skills.map((skillDTO: any) => {
       return {
-        id: ruleDTO.id,
-        name: ruleDTO.name,
-        description: ruleDTO.description,
+        id: skillDTO.id,
+        name: skillDTO.name,
+        description: skillDTO.description,
       }
     })
   } catch (e) {
@@ -198,7 +198,7 @@ async function loadData() {
   }
 }
 
-function showAddRuleDialog() {
+function showAddSkillDialog() {
   dialogAdd.value = true
 }
 
@@ -216,19 +216,19 @@ function handleEdit(id: number) {
 
 async function handleDelete(id: number) {
   try {
-    await RuleService.delete(id)
+    await SkillService.delete(id)
     await loadData()
-    ElMessage.success("Xóa quy tắc thành công!")
+    ElMessage.success("Xóa kỹ năng thành công!")
   } catch (e) {
     processErrorMessage(e,
-        "Có lỗi đã xảy ra trong quá trình xóa quy tắc. " +
+        "Có lỗi đã xảy ra trong quá trình xóa kỹ năng. " +
         "Vui lòng thử lại sau!")
   }
 }
 </script>
 
 <style scoped>
-.add-rule-btn {
+.add-skill-btn {
   float: right;
   margin-bottom: 1.5rem;
 }

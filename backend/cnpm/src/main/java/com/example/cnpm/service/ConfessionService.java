@@ -1,11 +1,8 @@
 package com.example.cnpm.service;
 
 import com.example.cnpm.controller.dtos.CommentDto;
-import com.example.cnpm.controller.dtos.CommentRequest;
 import com.example.cnpm.controller.dtos.ConfessionDto;
-import com.example.cnpm.entity.Comment;
 import com.example.cnpm.entity.Confession;
-import com.example.cnpm.entity.User;
 import org.springframework.data.domain.Page;
 
 public interface ConfessionService {
@@ -24,4 +21,6 @@ public interface ConfessionService {
     byte[] getConfessionImage(Long id);
 
     Page<ConfessionDto> getAllConfession(int page);
+
+    Page<ConfessionDto> getAllConfessions(int page);
 }

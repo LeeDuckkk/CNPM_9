@@ -41,7 +41,8 @@ public class ConfessionServiceImpl implements ConfessionService {
         confession.setDescription(confessionDto.getDescription());
         confession.setContent(confessionDto.getContent());
         confession.setAuthor(confessionDto.getAuthor());
-        confession.setIsApproved(isApproved);
+
+        confession.setIsApproved(isApproved && confessionDto.getIsApproved());
         confession = confessionRepository.save(confession);
 
         String path = storageService.saveImageFile(confessionDto.getImage(), confession.getId());
@@ -91,7 +92,7 @@ public class ConfessionServiceImpl implements ConfessionService {
 
     @Override
     public Page<CommentDto> getComments(Long id, int page) {
-        List<CommentDto> commentDtos = commentRepository.findAll().stream().map(CommentDto::new).collect(Collectors.toList());
+        List<CommentDto> commentDtos = commentRepository.findByConfessionId(id).stream().map(CommentDto::new).collect(Collectors.toList());
         int pageSize = 10;
         int totalElements = commentDtos.size();
         int totalPage = (int) Math.ceil((double) totalElements / pageSize);
@@ -128,6 +129,23 @@ public class ConfessionServiceImpl implements ConfessionService {
     @Override
     public Page<ConfessionDto> getAllConfession(int page) {
         List<ConfessionDto> confessionDtos = confessionRepository.findAllApprovedConfession().stream().map(ConfessionDto::new).collect(Collectors.toList());
+        int pageSize = 10;
+        int totalElements = confessionDtos.size();
+        int totalPage = (int) Math.ceil((double) totalElements / pageSize);
+        if (page > totalPage) {
+            page = totalPage;
+        }
+        if (page <= 0) {
+            page = 1;
+        }
+        int start = (page - 1) * pageSize;
+        int end = Math.min(start + pageSize, totalElements);
+        return new PageImpl<>(confessionDtos.subList(start, end), PageRequest.of(page - 1, pageSize), totalElements);
+    }
+
+    @Override
+    public Page<ConfessionDto> getAllConfessions(int page) {
+        List<ConfessionDto> confessionDtos = confessionRepository.findAllDesc().stream().map(ConfessionDto::new).collect(Collectors.toList());
         int pageSize = 10;
         int totalElements = confessionDtos.size();
         int totalPage = (int) Math.ceil((double) totalElements / pageSize);

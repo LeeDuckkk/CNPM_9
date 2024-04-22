@@ -11,5 +11,29 @@ export const EventService = {
             })
         ).data
         return bodyData;
+    },
+    add: async (payload: any) => {
+        const bodyData = (
+            await http.post(AdminApi.EVENTS, payload)
+        ).data
+        return bodyData;
+    },
+    edit: async (id: any, payload: any) => {
+        const bodyData = (
+            await http.put(AdminApi.EVENTS + '/' + id, payload)
+        ).data
+        return bodyData;
+    },
+    delete: async (id: any) => {
+        const bodyData = (
+            await http.delete(AdminApi.EVENTS + '/' + id)
+        ).data
+        return bodyData;
+    },
+    getOne: async (id: any) => {
+        const bodyData = (
+            await http.get(AdminApi.EVENTS + '/' + id)
+        ).data
+        return bodyData;
     }
 }

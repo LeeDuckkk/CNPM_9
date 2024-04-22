@@ -5,7 +5,6 @@ import com.example.cnpm.controller.dtos.CommentRequest;
 import com.example.cnpm.controller.dtos.ConfessionDto;
 import com.example.cnpm.entity.Comment;
 import com.example.cnpm.entity.Confession;
-import com.example.cnpm.entity.User;
 import com.example.cnpm.service.CommentService;
 import com.example.cnpm.service.ConfessionService;
 import com.example.cnpm.service.UserService;
@@ -14,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -34,27 +32,23 @@ public class ConfessionController {
     CommentService commentService;
 
     @PostMapping("")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Confession> createConfession(@ModelAttribute ConfessionDto confession) {
         return ResponseEntity.ok(confessionService.addConfession(confession, true));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Confession> updateConfession(@PathVariable Long id, @ModelAttribute ConfessionDto confession) {
         Confession updatedConfession = confessionService.updateConfession(id, confession);
         return ResponseEntity.ok(updatedConfession);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteConfession(@PathVariable Long id) {
         confessionService.deleteConfession(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Confession> getConfession(@PathVariable Long id) {
         Confession confession = confessionService.getConfession(id);
         return ResponseEntity.ok(confession);
@@ -82,8 +76,12 @@ public class ConfessionController {
 
     @PostMapping("/{id}/comment")
     public ResponseEntity<CommentDto> comment(@PathVariable Long id, @RequestBody CommentRequest comment) {
-        Long userId = userService.getCurrentUserId();
-        return new ResponseEntity<>(new CommentDto(commentService.commentConfession(id, userId, comment)), HttpStatus.OK);
+        try {
+            Long userId = userService.getCurrentUserId();
+            return new ResponseEntity<>(new CommentDto(commentService.commentConfession(id, userId, comment)), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new CommentDto(commentService.commentConfession(id, null, comment)), HttpStatus.OK);
+        }
     }
 
     @PutMapping("/{id}/comment")
@@ -108,6 +106,12 @@ public class ConfessionController {
     @GetMapping("")
     public ResponseEntity<?> getAllConfessions(@RequestParam int page) {
         return new ResponseEntity<>(confessionService.getAllConfession(page), HttpStatus.OK);
+    }
+
+    @GetMapping("/all-confessions")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getAllUnapprovedConfessions(@RequestParam int page) {
+        return new ResponseEntity<>(confessionService.getAllConfessions(page), HttpStatus.OK);
     }
 
     private String getImageType(byte[] imageData) {

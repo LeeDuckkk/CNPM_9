@@ -13,5 +13,5 @@ public interface RuleService {
 
     Rule getRule(Long id);
 
-    Page<RuleDto> getAllRule(int page);
+    Page<Rule> getAllRule(int page);
 }

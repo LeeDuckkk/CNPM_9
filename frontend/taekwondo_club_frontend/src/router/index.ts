@@ -3,7 +3,6 @@ import {Paths} from "@/router/paths";
 import MainLayout from "@/layouts/main/MainLayout.vue";
 import UnauthenticatedLayout from "@/layouts/UnauthenticatedLayout.vue";
 import LandingPageView from "@/views/main/LandingPageView.vue";
-import HomePageView from "@/views/main/HomePageView.vue";
 import RegisterView from "@/views/auth/RegisterView.vue";
 import LoginView from "@/views/auth/LoginView.vue";
 import ForgotPasswordView from "@/views/auth/ForgotPasswordView.vue";
@@ -15,13 +14,18 @@ import SkillView from "@/views/main/SkillView.vue";
 import EventView from "@/views/main/EventView.vue";
 import ConfessionView from "@/views/main/ConfessionView.vue";
 import ConfessionDetailView from "@/components/confession/ConfessionDetailView.vue";
+import SkillManageView from "@/views/admin/skill/SkillManageView.vue";
+import RuleManageView from "@/views/admin/rule/RuleManageView.vue";
+import HomePageView from "@/views/main/HomePageView.vue";
+import EventManageView from "@/views/admin/event/EventManageView.vue";
+import ConfessionManageView from "@/views/admin/confession/ConfessionManageView.vue";
 
 export const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
             path: Paths.HOME,
-            component: HomePageView,
+            component: MainLayout,
         },
         {
             path: Paths.MAIN,
@@ -36,8 +40,24 @@ export const router = createRouter({
                     component: UserManageView,
                 },
                 {
+                    path: Paths.ADMIN_MANAGE_SKILL,
+                    component: SkillManageView,
+                },
+                {
+                    path: Paths.ADMIN_MANAGE_RULE,
+                    component: RuleManageView,
+                },
+                {
+                    path: Paths.ADMIN_MANAGE_EVENT,
+                    component: EventManageView,
+                },
+                {
                     path: Paths.MANAGE_USER,
                     component: UserInfomationView,
+                },
+                {
+                    path: Paths.ADMIN_MANAGE_CONFESSION,
+                    component: ConfessionManageView,
                 },
                 {
                     path: Paths.RULE,

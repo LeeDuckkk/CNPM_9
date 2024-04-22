@@ -10,4 +10,7 @@ public interface ConfessionRepository extends JpaRepository<Confession, Long> {
 
     @Query("SELECT c FROM Confession c WHERE c.isApproved = true ORDER BY c.createdAt DESC")
     List<Confession> findAllApprovedConfession();
+
+    @Query("SELECT c FROM Confession c ORDER BY c.createdAt DESC")
+    List<Confession> findAllDesc();
 }

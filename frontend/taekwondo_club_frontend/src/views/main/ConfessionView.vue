@@ -89,4 +89,8 @@ function formatDate(dateString: string) {
 .detail-button {
   align-self: flex-end;
 }
+
+.confession-item {
+  margin-bottom: 20px;
+}
 </style>

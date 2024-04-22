@@ -53,8 +53,8 @@ public class RuleServiceImpl implements RuleService {
     }
 
     @Override
-    public Page<RuleDto> getAllRule(int page) {
-        List<RuleDto> ruleDtos = ruleRepository.findAllDesc().stream().map(RuleDto::new).collect(Collectors.toList());
+    public Page<Rule> getAllRule(int page) {
+        List<Rule> ruleDtos = ruleRepository.findAllDesc();
         int pageSize = 10;
         int totalElements = ruleDtos.size();
         int totalPage = (int) Math.ceil((double) totalElements / pageSize);

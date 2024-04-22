@@ -44,7 +44,7 @@ public class RuleController {
     }
 
     @GetMapping("")
-    public Page<RuleDto> getAllRules(@RequestParam int page) {
+    public Page<Rule> getAllRules(@RequestParam int page) {
         return ruleService.getAllRule(page);
     }
 }
