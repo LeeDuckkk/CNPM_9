@@ -6,7 +6,6 @@ import LandingPageView from "@/views/main/LandingPageView.vue";
 import RegisterView from "@/views/auth/RegisterView.vue";
 import LoginView from "@/views/auth/LoginView.vue";
 import ForgotPasswordView from "@/views/auth/ForgotPasswordView.vue";
-import ResetPasswordView from "@/views/auth/ResetPasswordView.vue";
 import UserManageView from "@/views/admin/user/UserManageView.vue";
 import UserInfomationView from "@/views/main/UserInfomationView.vue";
 import RuleView from "@/views/main/RuleView.vue";
@@ -98,10 +97,6 @@ export const router = createRouter({
                 {
                     path: Paths.FORGOT_PASSWORD,
                     component: ForgotPasswordView,
-                },
-                {
-                    path: Paths.RESET_PASSWORD,
-                    component: ResetPasswordView,
                 },
             ]
         },

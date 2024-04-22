@@ -128,6 +128,12 @@
           </router-link></span>
 
           </p>
+          <el-alert
+              :title="errorMessage"
+              type="error"
+              v-if="errorMessage"
+              class="error-message"
+          ></el-alert>
           <p class="p line">Hoặc đăng nhập bằng</p>
 
           <div class="flex-row">
@@ -302,7 +308,7 @@ async function onSubmit() {
     // redirect to login
   } catch (e: any) {
     processErrorMessage(e)
-    errorMessage.value = e.response?.data?.data
+    errorMessage.value = e.response?.data?.message
   } finally {
     // refs.SUBMIT_BUTTON?.setLoading(false)
   }

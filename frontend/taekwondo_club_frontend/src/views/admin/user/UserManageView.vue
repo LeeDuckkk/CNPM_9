@@ -292,6 +292,7 @@ async function loadData() {
   } catch (e) {
     processErrorMessage(e, "Có lỗi đã xảy ra trong quá trình tải dữ liệu. " +
         "Vui lòng thử lại sau!")
+
   } finally {
     loading.value = false
   }
