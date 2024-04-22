@@ -289,6 +289,7 @@ function onSubmit() {
           achievement: form.value.achievement,
           joinDate: form.value.joinDate,
           placement: form.value.placement,
+          role: 'ROLE_MEMBER',
         })
         ElMessage({
           message:

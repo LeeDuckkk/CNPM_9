@@ -101,12 +101,12 @@
 
       <el-form-item label="Placement" prop="placement">
         <el-select class="b-form-item" v-model="form.placement" placeholder="Chưa có thông tin...">
-          <el-option label="WHITE" value="WHITE"/>
-          <el-option label="YELLOW" value="YELLOW"/>
-          <el-option label="GREEN" value="GREEN"/>
-          <el-option label="BLUE" value="BLUE"/>
-          <el-option label="RED" value="RED"/>
-          <el-option label="BLACK" value="BLACK"/>
+          <el-option label="Đai trắng" value="WHITE"/>
+          <el-option label="Đai vàng" value="YELLOW"/>
+          <el-option label="Đai xanh lá" value="GREEN"/>
+          <el-option label="Đai xanh nước biển" value="BLUE"/>
+          <el-option label="Đai đỏ" value="RED"/>
+          <el-option label="Đai đen" value="BLACK"/>
         </el-select>
       </el-form-item>
       <br>

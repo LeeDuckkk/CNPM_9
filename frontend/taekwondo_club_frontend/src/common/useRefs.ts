@@ -1,12 +1,11 @@
 import { reactive } from 'vue'
 
-export default function useRefs<T extends object>() {
-  const refs = reactive<T>({} as T)
-  const toRef = (refName: keyof T) => (el: any) =>
-    ((refs as T)[refName as keyof T] = el)
+export default function useRefs() {
+  const $refs = reactive<Map<string, any>>(new Map<string, any>())
+  const toRef = (refName: string) => (el: any) => $refs.set(refName, el)
 
   return {
-    refs,
+    $refs,
     toRef,
   }
 }

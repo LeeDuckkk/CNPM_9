@@ -1,6 +1,56 @@
 <template>
   <h1>Quản lý người dùng</h1>
-  <br />
+  <br/>
+  <el-row :gutter="12">
+    <el-col :md="16">
+      <el-form
+          label-position="left"
+          :ref="toRef('FORM_FILTER')"
+          :rules="rules"
+          style="max-width: 800px"
+      >
+        <el-row :gutter="10">
+          <el-col :md="3">
+            <el-form-item label="ID" prop="id">
+              <el-input
+                  :min="0"
+                  placeholder="Tìm ID"
+                  type="number"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :md="9">
+            <el-form-item label="Tên" prop="name">
+              <el-input
+                  placeholder="Lọc theo tên người dùng"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :md="9">
+            <el-form-item label="Email" prop="email">
+              <el-input
+                  type="email"
+                  placeholder="Lọc theo email người dùng"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :md="3">
+            <CommonButton type="default" @click="resetFilter"
+            >Đặt lại
+            </CommonButton>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-col>
+    <el-col :md="8">
+      <CommonButton
+          class="add-user-btn"
+          type="primary"
+          @click="showAddUserDialog"
+      >Thêm người dùng
+      </CommonButton>
+    </el-col>
+  </el-row>
 
   <el-table
       v-loading="loading"
@@ -61,42 +111,42 @@
         header-align="center"
         align="center"
     />
-<!--    <el-table-column-->
-<!--        prop="hobby"-->
-<!--        label="Hobby"-->
-<!--        header-align="center"-->
-<!--        align="center"-->
-<!--    />-->
-<!--    <el-table-column-->
-<!--        prop="hatred"-->
-<!--        label="Hatred"-->
-<!--        header-align="center"-->
-<!--        align="center"-->
-<!--    />-->
-<!--    <el-table-column-->
-<!--        prop="strength"-->
-<!--        label="Strength"-->
-<!--        header-align="center"-->
-<!--        align="center"-->
-<!--    />-->
-<!--    <el-table-column-->
-<!--        prop="weakness"-->
-<!--        label="Weakness"-->
-<!--        header-align="center"-->
-<!--        align="center"-->
-<!--    />-->
-<!--    <el-table-column-->
-<!--        prop="lifeMotto"-->
-<!--        label="Life Motto"-->
-<!--        header-align="center"-->
-<!--        align="center"-->
-<!--    />-->
-<!--    <el-table-column-->
-<!--        prop="achievement"-->
-<!--        label="Achievement"-->
-<!--        header-align="center"-->
-<!--        align="center"-->
-<!--    />-->
+    <!--    <el-table-column-->
+    <!--        prop="hobby"-->
+    <!--        label="Hobby"-->
+    <!--        header-align="center"-->
+    <!--        align="center"-->
+    <!--    />-->
+    <!--    <el-table-column-->
+    <!--        prop="hatred"-->
+    <!--        label="Hatred"-->
+    <!--        header-align="center"-->
+    <!--        align="center"-->
+    <!--    />-->
+    <!--    <el-table-column-->
+    <!--        prop="strength"-->
+    <!--        label="Strength"-->
+    <!--        header-align="center"-->
+    <!--        align="center"-->
+    <!--    />-->
+    <!--    <el-table-column-->
+    <!--        prop="weakness"-->
+    <!--        label="Weakness"-->
+    <!--        header-align="center"-->
+    <!--        align="center"-->
+    <!--    />-->
+    <!--    <el-table-column-->
+    <!--        prop="lifeMotto"-->
+    <!--        label="Life Motto"-->
+    <!--        header-align="center"-->
+    <!--        align="center"-->
+    <!--    />-->
+    <!--    <el-table-column-->
+    <!--        prop="achievement"-->
+    <!--        label="Achievement"-->
+    <!--        header-align="center"-->
+    <!--        align="center"-->
+    <!--    />-->
     <el-table-column
         :formatter="tableDateFormatter"
         prop="joinDate"
@@ -110,7 +160,48 @@
         header-align="center"
         align="center"
     />
+    <el-table-column
+        fixed="right"
+        label="Action"
+        width="180"
+        header-align="center"
+        align="center"
+    >
+      <template #default="scope">
+        <CommonButton
+            @click="handleEdit(scope.row.id)"
+            size="mini"
+            link
+            type="primary"
+        >Chỉnh sửa
+        </CommonButton>
+        <el-popconfirm
+            :title="`Bạn chắc chắn muốn xóa người dùng '${scope.row.name}'?`"
+            confirm-button-text="Xác nhận"
+            cancel-button-text="Hủy"
+            @confirm="handleDelete(scope.row.id)"
+        >
+          <template #reference>
+            <CommonButton link type="danger" :ref="toRef('DELETE_BTN')"
+            >Xóa
+            </CommonButton>
+          </template>
+        </el-popconfirm>
+      </template>
+    </el-table-column>
   </el-table>
+
+  <AddUserDialog
+      v-model="dialogAdd"
+      @close="closeDialogAdd"
+  />
+
+  <EditUserDialog
+      v-model="dialogEdit"
+      :id="idEdit"
+      @close="closeDialogEdit"
+  />
+
   <el-pagination
       v-model:page="currentPage"
       :page-size="pageSize"
@@ -124,11 +215,13 @@ import {onMounted, reactive, ref, watch} from 'vue'
 import {processErrorMessage} from '@/helper/responseErrorHandle'
 import type {FormRules} from 'element-plus'
 import {ElMessage} from 'element-plus'
-import { tableDateFormatter, tableFullDateTimeFormatter } from '@/helper/Table'
+import {tableDateFormatter} from '@/helper/Table'
 import {useRouter} from "vue-router";
-import FAIcon from '@/components/common/FAIcon.vue'
 import {UserService} from "@/services/user";
 import useRefs from '@/common/useRefs'
+import AddUserDialog from "@/components/user/AddUserDialog.vue";
+import CommonButton from "@/components/common/CommonButton.vue";
+import EditUserDialog from "@/components/user/EditUserDialog.vue";
 
 const dialogAdd = ref(false)
 const dialogEdit = ref(false)
@@ -204,6 +297,15 @@ async function loadData() {
   }
 }
 
+function showAddUserDialog() {
+  dialogAdd.value = true
+}
+
+function resetFilter() {
+  $refs.get(RefNames.FORM_FILTER)?.resetFields()
+  loadData()
+}
+
 const router = useRouter()
 
 function handleEdit(id: number) {
@@ -212,9 +314,10 @@ function handleEdit(id: number) {
 }
 
 async function handleDelete(id: number) {
-  $refs.get(RefNames.DELETE_BTN + id)?.setLoading(true)
+  // $refs.get(RefNames.DELETE_BTN + id)?.setLoading(true)
+  console.log(id)
   try {
-    // await deleteUser(id)
+    await UserService.delete(id)
     await loadData()
     ElMessage.success("Xóa người dùng thành công!")
   } catch (e) {
@@ -222,7 +325,7 @@ async function handleDelete(id: number) {
         "Có lỗi đã xảy ra trong quá trình xóa người dùng. " +
         "Vui lòng thử lại sau!")
   } finally {
-    $refs.get(RefNames.DELETE_BTN + id)?.setLoading(false)
+    // $refs.get(RefNames.DELETE_BTN + id)?.setLoading(false)
   }
 }
 </script>

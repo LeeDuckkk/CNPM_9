@@ -14,5 +14,17 @@ export const UserService = {
     },
     changePassword: async (payload: any) => {
         return await http.post(AuthAPI.RESET_PASSWORD, payload)
-    }
+    },
+    add: async (payload: any) => {
+        return await http.post(AdminApi.USERS, payload)
+    },
+    edit: async (id: any, payload: any) => {
+        return await http.put(AdminApi.USERS + '/' + id, payload)
+    },
+    delete: async (id: any) => {
+        return await http.delete(AdminApi.USERS + '/' + id)
+    },
+    getOne: async (id: any) => {
+        return await http.get(AdminApi.USERS + '/' + id)
+    },
 }

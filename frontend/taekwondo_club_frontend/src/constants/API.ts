@@ -21,4 +21,8 @@ export const UserApi = {
 
 export const AdminApi = {
     USER_MANAGE: '/admin/users',
+    USERS: '/users',
+    EVENTS: '/events',
+    SKILLS: '/skills',
+    RULES: '/rules',
 }
